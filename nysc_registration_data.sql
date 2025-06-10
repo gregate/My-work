@@ -74,6 +74,12 @@ where origin_state = 'oyo'
 and (graduating_honors = 'third class' or graduating_honors = 'pass')
 ;
 
+-- Youngest corps member with their full name and age --
+select fullname, age 
+from nysc_registration 
+where age = (select min (age) from nysc_registration)
+; 
+
 -- corps members whose course of study is either medicine or pharmacy, who are not more than 25 years old--
 select fullname, age, course_study
 from nysc_registration
@@ -89,5 +95,89 @@ and preferred_state in ('Akwa Ibom', 'Bayelsa', 'Cross River', 'Delta', 'Edo', '
 and (graduating_honors = 'second class lower')
 ;
 
+-- Youngest corps member with their full name and age --
+select fullname, age
+from nysc_registration
+where age = ( select min(age) from nysc_registration)
+;
 
+-- oldest corps member with their full name and age from the university of Lagos --
+select fullname, age, institution
+from nysc_registration 
+where age = ( select max(age) from nysc_registration) 
+and institution = 'university of lagos'
+;
 
+-- total corps member from each institution state in descending order --
+select institution_state, count(*) as total_corps_members
+from nysc_registration
+group by institution_state
+order by total_corps_members desc
+;
+
+-- List all unique institution names --
+select distinct institution
+from nysc_registration;
+
+-- Total number of corps members in each prefered state, display only states with more than 200 corps members --
+Select preferred_state, count(*) as total_number
+from nysc_registration
+group by preferred_state
+having count(*) > 200
+order by total_number desc ;
+
+-- Top 5 youngest corps members --
+select fullname,age
+from nysc_registration
+where age = (select min(age) from nysc_registration)
+limit 5
+;
+-- show all unique courses of study--
+select distinct course_study
+from nysc_registration;
+
+-- Day #9 of 30 days challenge with Funmi --
+-- Find all corps members whose email address contains gmail --
+select * from nysc_registration
+where gmail like '%gmail%';
+
+select  *
+from nysc_registration
+where origin_state in ('Lagos', 'Enugu', 'Kano');
+
+-- List corps members between the ages of 23 and 26 --
+select id, fullname, age 
+from nysc_registration
+where age between 23 and 26;
+
+-- Find corps members whose full name begin with A'--
+select id, fullname 
+from nysc_registration
+where fullname like 'A%';
+
+-- Show corps members whose preferred state is either Abuja, Rivers, Delta, or Edo--
+Select fullname, preferred_state
+from nysc_registration
+where preferred_state in ('Abuja', 'Rivers', 'Delta','Edo');
+ 
+ -- Day 10 of 30 days challenge--
+ -- Corps members whose age is outside the normal youth range --
+ select id, fullname, age
+ from nysc_registration
+ where age <18 or age > 35;
+ 
+ -- corps members whose preferred state is different from their origin state--
+ select id, fullname, origin_state, preferred_state
+ from nysc_registration
+ where origin_state != preferred_state;
+ 
+ -- Corps members whose graduating honors is either first class or pass and are below the age of 25 --
+ select id, fullname, age, graduating_honors
+ from nysc_registration
+ where graduating_honors = 'firstclass' or graduating_honors = 'pass'
+ and age < 25;
+ 
+ -- corps members whose gmail or phone number is missing --
+ select id, fullname, gmail, telephone
+from nysc_registration
+where gmail is null or telephone is null 
